@@ -147,6 +147,7 @@
             <e p="SurroundingDetectorAI.cs" t="Include" />
             <e p="TargetChaser.cs" t="Include" />
           </e>
+          <e p="FastForwardController.cs" t="Include" />
           <e p="GameEvents.cs" t="Include" />
           <e p="GameManager.cs" t="Include" />
           <e p="IKnockbackable.cs" t="Include" />

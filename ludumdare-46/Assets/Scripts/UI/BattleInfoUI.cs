@@ -9,6 +9,7 @@ public class BattleInfoUI : MonoBehaviour
     
     [SerializeField] private TextMeshProUGUI PlayerMaxHealth;
     [SerializeField] private TextMeshProUGUI PlayerHealth;
+    [SerializeField] private TextMeshProUGUI TurnsPassed;
 
     [SerializeField] private GameObject SpeedLines;
     [SerializeField] private GameObject SpeedRush;
@@ -16,6 +17,7 @@ public class BattleInfoUI : MonoBehaviour
     [SerializeField] private GameObject GameOverPanel;
     [SerializeField] private AnimationEvents GameOverPanelAnimationEvents;
 
+    private int turn = 1;
     private bool anyButtonToReset;
 
     private void Start()
@@ -23,6 +25,7 @@ public class BattleInfoUI : MonoBehaviour
         GameEvents.OnUpdateUi += UpdateUi;
 
         GameEvents.OnSpeedRush += SpeedRushing;
+        GameEvents.OnTurnEnd += OnTurnEnd;
         GameEvents.OnGameOver += OnGameOver;
 
         GameOverPanelAnimationEvents.OnFinishAnimation += OnFinishedGameOverAnimation;
@@ -35,6 +38,7 @@ public class BattleInfoUI : MonoBehaviour
         GameEvents.OnUpdateUi -= UpdateUi;
         
         GameEvents.OnSpeedRush -= SpeedRushing;
+        GameEvents.OnTurnEnd -= OnTurnEnd;
         GameEvents.OnGameOver -= OnGameOver;
         
         GameOverPanelAnimationEvents.OnFinishAnimation -= OnFinishedGameOverAnimation;
@@ -44,6 +48,13 @@ public class BattleInfoUI : MonoBehaviour
     {
         PlayerHealth.text = battleManager.PlayerInBattleData.HealthPoints.ToString();
         PlayerMaxHealth.text = battleManager.PlayerInBattleData.MaxHealthPoints.ToString();
+        TurnsPassed.text = $"{turn}";
+    }
+
+    private void OnTurnEnd()
+    {
+        turn++;
+        GameEvents.OnUpdateUi?.Invoke();
     }
 
     private void SpeedRushing()

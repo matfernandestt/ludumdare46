@@ -32,6 +32,8 @@ public static class GameEvents
     public static Action OnPlayerUseAttack;
     public static Action OnPlayerUseMagic;
     public static Action OnPlayerUseGuard;
+    public static Action OnPlayerCast;
+    public static Action OnPlayerFinishCasting;
 
     public static Action<int> OnEnemyReceiveDamage;
     public static Action<int> OnPlayerReceiveDamage;
@@ -42,6 +44,8 @@ public static class GameEvents
     public static Action OnSpeedRush;
     public static Action OnUpdateUi;
     public static Action<int> OnPlayerHeal;
+
+    public static Action OnTurnEnd;
 
     public static Action OnGoBack;
 }

@@ -2,12 +2,14 @@
 
 public class BaseMovingPlatform : MonoBehaviour
 {
+    [SerializeField] private Transform ObjToParent;
+    
     private void OnTriggerEnter(Collider other)
     {
         var player = other.GetComponent<PlayerMovement>();
         if (player != null)
         {
-            player.transform.parent = transform;
+            player.transform.parent = ObjToParent;
             //player.PauseGravity();
         }
     }

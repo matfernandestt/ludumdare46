@@ -29,7 +29,7 @@ public class BattleManager : MonoBehaviour
     private bool playerOnGuard;
     private bool gameEnded;
     private bool playerDied;
-    
+
     public PlayerBattleData PlayerInBattleData => playerInBattle;
 
     private void Awake()
@@ -70,6 +70,14 @@ public class BattleManager : MonoBehaviour
             }
         }
         targetedEnemyId = 0;
+        for (var i = 0; i < EnemySpots.Length; i++)
+        {
+            var enemy = EnemySpots[i];
+            if (enemy.LinkedEnemy.Dead) continue;
+            targetedEnemyId = i;
+            break;
+        }
+
         GameManager.ResetBattlePhase();
         
         BattleSrc.Play();
@@ -130,8 +138,12 @@ public class BattleManager : MonoBehaviour
                     yield return new WaitWhile(() => enemy.LinkedEnemy.Attacking || playerDied);
                 }
             }
-            if(!playerDied)
+
+            if (!playerDied)
+            {
                 GameManager.GetNextBattlePhase();
+                GameEvents.OnTurnEnd?.Invoke();
+            }
         }
 
         StartCoroutine(EnemyAttack());

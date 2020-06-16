@@ -124,7 +124,6 @@ public class PlayerMovement : MonoBehaviour, IKnockbackable
 
             Controller.Move(new Vector3(hSpeed, vSpeed, zSpeed) * Time.deltaTime);
         }
-        transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
     }
     
     private void AnimationChecks()
@@ -151,7 +150,7 @@ public class PlayerMovement : MonoBehaviour, IKnockbackable
 
     private bool GetJumpButton()
     {
-        return input.GetButton("Jump");
+        return input.GetButtonDown("Jump");
     }
 
     public void PlayerLoseControlUntilGrounded()

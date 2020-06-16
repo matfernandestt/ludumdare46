@@ -17,6 +17,7 @@ public class BattlePlayer : MonoBehaviour
     private AttackOptionSelected attackOption;
     private Coroutine actionMoveCoroutine;
     private bool onGuard;
+    private bool gameEnded;
     
     private static readonly int BasicMovement = Animator.StringToHash("BasicMovement");
     private static readonly int Attack = Animator.StringToHash("Attack");
@@ -239,6 +240,7 @@ public class BattlePlayer : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         GameEvents.OnPlayerUseAttack?.Invoke();
         yield return new WaitForSeconds(1f);
+        GameEvents.OnPlayerCast?.Invoke();
         ThisAnim.SetFloat(BasicMovement, 1);
         speed = 8f;
         t = 0;
@@ -262,6 +264,7 @@ public class BattlePlayer : MonoBehaviour
         }
         transform.eulerAngles = new Vector3(0, 0, 0);
         lockInputs = false;
+        GameEvents.OnPlayerFinishCasting.Invoke();
         GameManager.GetNextBattlePhase();
     }
     
@@ -273,20 +276,26 @@ public class BattlePlayer : MonoBehaviour
         GameEvents.OnPlayerUseMagic?.Invoke();
         yield return new WaitForSeconds(.5f);
         lockInputs = false;
+        GameEvents.OnPlayerFinishCasting.Invoke();
         GameManager.GetNextBattlePhase();
     }
     
     private IEnumerator StartGuardPose(BattleEnemySpot enemySpot)
     {
+        GameEvents.OnPlayerReceiveDamage?.Invoke(1);
+        GameEvents.OnUpdateUi?.Invoke();
         lockInputs = true;
         yield return new WaitForSeconds(.5f);
+        if (gameEnded) yield break;
         GameEvents.OnPlayerUseGuard?.Invoke();
         onGuard = true;
         GuardEffect.SetActive(true);
         GuardSFX.Play();
         yield return new WaitForSeconds(.5f);
         lockInputs = false;
-        GameManager.GetNextBattlePhase();
+        GameEvents.OnPlayerFinishCasting.Invoke();
+        GameManager.ResetBattlePhase();
+        //GameManager.GetNextBattlePhase();
     }
 
     private void OnBattleVictory()
@@ -296,6 +305,7 @@ public class BattlePlayer : MonoBehaviour
 
     private void OnGameOver()
     {
+        gameEnded = true;
         ThisAnim.SetTrigger(Death);
     }
 }

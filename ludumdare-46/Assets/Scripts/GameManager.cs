@@ -124,7 +124,12 @@ public class GameManager : MonoBehaviour
 
     public static void ResetBattlePhase()
     {
-        instance.battlePhase = BattlePhase.SelectionPhase;
+        instance.CurrentBattlePhase = BattlePhase.SelectionPhase;
+    }
+
+    public static void SetManuallyBattlePhase(BattlePhase phase)
+    {
+        instance.CurrentBattlePhase = phase;
     }
 
     public static BattlePhase GetBattlePhase()
